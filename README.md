@@ -1,7 +1,5 @@
-# Web3-Example
+# Web3
 
-This repository use the [Convetional commit format](https://www.conventionalcommits.org/en/v1.0.0/)
+This repository is intended as a playground to learn web3. Utilized libraries are [ethers.js](https://docs.ethers.io/v5/getting-started/) and [web3-react](https://github.com/NoahZinsmeister/web3-react).
 
-### TODO
-
-- creare front-end per interagire con smart-contract younicam
+This repository uses the [Conventional commit format](https://www.conventionalcommits.org/en/v1.0.0/). [Husky](https://github.com/typicode/husky) is used to ensure correct commit format.
