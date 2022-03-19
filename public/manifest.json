@@ -1,6 +1,6 @@
 {
-  "short_name": "Web3",
-  "name": "Web3 Example",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",

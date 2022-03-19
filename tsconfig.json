@@ -1,35 +1,26 @@
 {
   "compilerOptions": {
-    "incremental": true,
-    "outDir": "build/lib",
-    "target": "es6",
-    "module": "esnext",
-    "lib": ["DOM", "ESNext"],
-    "sourceMap": true,
-    "importHelpers": true,
-    "declaration": true,
-    "rootDir": "src",
-    "strict": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": false,
-    "noImplicitAny": false,
-    "noFallthroughCasesInSwitch": true,
-    "allowJs": false,
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "baseUrl": "src",
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "typeRoots": ["./src/typings", "./node_modules/@types"],
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "build", "scripts"]
+  "include": [
+    "src"
+  ]
 }
