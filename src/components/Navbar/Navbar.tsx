@@ -2,18 +2,13 @@ import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import UserCorner from "./UserCorner";
 import ThemeIcon from "./ThemeIcon";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const navigation = [
-  { name: "Home", to: "/", current: true },
-  { name: "Swap", to: "/swap", current: false },
-  { name: "Projects", to: "#", current: false },
-  { name: "Calendar", to: "#", current: false },
+  { name: "Home", to: "/" },
+  { name: "Swap", to: "/swap" },
+  { name: "About", to: "/about" },
 ];
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
 
 const Navbar = () => {
   return (
@@ -44,19 +39,19 @@ const Navbar = () => {
                 <div className="hidden sm:block sm:ml-6 ">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <Link
+                      <NavLink
                         key={item.name}
                         to={item.to}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "px-3 py-2 rounded-md text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
+                        className={({ isActive }) =>
+                          `${
+                            isActive
+                              ? "bg-gray-900 text-white"
+                              : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                          } px-3 py-2 rounded-md text-sm font-medium`
+                        }
                       >
                         {item.name}
-                      </Link>
+                      </NavLink>
                     ))}
                   </div>
                 </div>
@@ -71,19 +66,19 @@ const Navbar = () => {
           <Disclosure.Panel className="sm:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as={Link}
-                  to={item.to}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block px-3 py-2 rounded-md text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
+                <Disclosure.Button key={item.name} className="block ">
+                  <NavLink
+                    to={item.to}
+                    className={({ isActive }) =>
+                      `${
+                        isActive
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                      } block px-3 py-2 rounded-md text-base font-medium `
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
                 </Disclosure.Button>
               ))}
             </div>

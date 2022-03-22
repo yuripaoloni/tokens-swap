@@ -5,13 +5,13 @@ import Swap from "./pages/Swap";
 
 const App = () => {
   return (
-    <>
-      <Navbar />;
+    <div className="min-h-full">
+      <Navbar />
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/" element={<Swap />} />
+        <Route path="/swap" element={<Swap />} />
       </Routes>
-    </>
+    </div>
   );
 };
 

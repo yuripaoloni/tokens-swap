@@ -1,9 +1,6 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
+import { Link } from "react-router-dom";
 
 const items = [
   { name: "Your Profile", link: "##" },
@@ -40,15 +37,13 @@ const UserCorner = () => {
           {items.map((item) => (
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href={item.link}
-                  className={classNames(
-                    active ? "bg-gray-100" : "",
-                    "block px-4 py-2 text-sm text-gray-700"
-                  )}
+                <Link
+                  to={item.link}
+                  className={`${active ? "bg-gray-100" : ""}
+                     block px-4 py-2 text-sm text-gray-700`}
                 >
                   {item.name}
-                </a>
+                </Link>
               )}
             </Menu.Item>
           ))}
