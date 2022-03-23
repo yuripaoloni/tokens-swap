@@ -1,14 +1,21 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ChevronDownIcon, XIcon } from "@heroicons/react/outline";
-
-const token = {
-  link: "https://pancakeswap.finance/images/tokens/0x8F0528cE5eF7B51152A59745bEfDD91D97091d2F.png",
-  name: "ALPACA",
-};
+import {
+  ChevronDownIcon,
+  QuestionMarkCircleIcon,
+  XIcon,
+} from "@heroicons/react/outline";
+import pancakeTokensList from "../../config/constants/PancakeTokensList.json";
+import Token from "../../typings/Token";
 
 const TokensListModal = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [token, setToken] = useState<Token>({} as Token);
+
+  const selectToken = (token: Token) => {
+    setToken(token);
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -17,8 +24,14 @@ const TokensListModal = () => {
         onClick={() => setIsOpen(true)}
         className="flex items-center px-2 py-2 text-sm font-medium text-gray-600 border-[1px] shadow-md rounded-md hover:bg-gray-100 "
       >
-        <img className="inline h-6 w-6 rounded-full" src={token.link} alt="" />
-        <span className="font-bold mx-2">BNB</span>
+        {token.logoURI ? (
+          <img className="h-5 w-5 rounded-full" src={token.logoURI} alt="" />
+        ) : (
+          <QuestionMarkCircleIcon className="h-5 inline" />
+        )}
+        <span className="font-bold mx-2">
+          {token.symbol ? token.symbol : "Select token"}
+        </span>
         <ChevronDownIcon className="h-5 inline" />
       </button>
 
@@ -69,7 +82,6 @@ const TokensListModal = () => {
                   />
                 </Dialog.Title>
                 <Dialog.Description className="m-5 p-4 border-[1px] rounded-md shadow-md focus-within:border-indigo-600">
-                  {/* <div > */}
                   <input
                     type="text"
                     name="amount"
@@ -77,26 +89,29 @@ const TokensListModal = () => {
                     className="block w-full text-gray-500 outline-0"
                     placeholder="Search name or paste address"
                   />
-                  {/* </div> */}
                 </Dialog.Description>
                 <div className="mt-4 overflow-y-auto max-h-96 scrollbar">
-                  {[...Array(15)].map((i) => (
-                    <div className="flex justify-between items-center px-4 py-4 first:pt-2 last:pb-2 hover:bg-gray-100 hover:rounded-md">
+                  {pancakeTokensList.tokens.map((token, index) => (
+                    <button
+                      key={index}
+                      className="w-full flex justify-between items-center px-4 py-4 first:pt-2 last:pb-2 hover:bg-gray-100 hover:rounded-md"
+                      onClick={() => selectToken(token)}
+                    >
                       <div className="flex items-center">
                         <img
                           className="h-7 w-7 rounded-full"
-                          src={token.link}
+                          src={token.logoURI}
                           alt=""
                         />
-                        <p className="ml-3 text-gray-600 font-semibold ">
-                          {token.name}
-                          <p className="text-gray-400 text-sm">
-                            Alpaca Finance
+                        <div className="ml-3 text-gray-600 font-semibold text-left">
+                          {token.symbol}
+                          <p className="text-left text-gray-400 text-sm">
+                            {token.name}
                           </p>
-                        </p>
+                        </div>
                       </div>
                       <p>0</p>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
