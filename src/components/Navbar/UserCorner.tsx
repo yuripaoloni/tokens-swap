@@ -17,7 +17,7 @@ const UserCorner = () => {
 
   return (
     <Menu as="div" className="ml-3 relative">
-      <div>
+      <div className="min-w-[127px] flex justify-center">
         {active ? (
           <Menu.Button className="group bg-gray-800 p-2 flex text-sm rounded-full">
             <p className="text-gray-300 text-base my-auto pr-2 group-hover:text-white">
@@ -47,8 +47,8 @@ const UserCorner = () => {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {items.map((item) => (
-            <Menu.Item>
+          {items.map((item, index) => (
+            <Menu.Item key={index}>
               {({ active }) => (
                 <button
                   onClick={item.onClick}

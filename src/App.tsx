@@ -7,11 +7,11 @@ import { useWeb3React } from "@web3-react/core";
 import { injectedConnector } from "./utils/web3react";
 
 const App = () => {
-  // const { activate, account } = useWeb3React();
+  const { activate } = useWeb3React();
 
-  // useEffect(() => {
-  //   activate(injectedConnector);
-  // }, [activate]);
+  useEffect(() => {
+    activate(injectedConnector);
+  }, [activate]);
 
   return (
     <div className="min-h-full">
