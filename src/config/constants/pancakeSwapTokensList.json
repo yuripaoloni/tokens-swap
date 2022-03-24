@@ -19,6 +19,14 @@
       "logoURI": "https://pancakeswap.finance/images/tokens/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56.png"
     },
     {
+      "name": "Diviner Protocol",
+      "symbol": "DPT",
+      "address": "0xE69cAef10A488D7AF31Da46c89154d025546e990",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://tokens.pancakeswap.finance/images/0xE69cAef10A488D7AF31Da46c89154d025546e990.png"
+    },
+    {
       "name": "Ethereum Token",
       "symbol": "ETH",
       "address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",

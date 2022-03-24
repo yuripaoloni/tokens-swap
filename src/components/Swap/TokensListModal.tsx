@@ -5,15 +5,24 @@ import {
   QuestionMarkCircleIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import pancakeTokensList from "../../config/constants/PancakeTokensList.json";
+import pancakeSwapTokensList from "../../config/constants/pancakeSwapTokensList.json";
 import Token from "../../typings/Token";
 
-const TokensListModal = () => {
+type TokensListModalProps = {
+  token: Token;
+  setToken: (token: Token, isTokenA: boolean) => void;
+  isTokenA: boolean;
+};
+
+const TokensListModal = ({
+  token,
+  setToken,
+  isTokenA,
+}: TokensListModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [token, setToken] = useState<Token>({} as Token);
 
   const selectToken = (token: Token) => {
-    setToken(token);
+    setToken(token, isTokenA);
     setIsOpen(false);
   };
 
@@ -76,22 +85,26 @@ const TokensListModal = () => {
                   className="flex justify-between text-xl font-bold text-gray-900 py-4 px-4 border-b-[1px]"
                 >
                   Select a Token
-                  <XIcon
-                    className="inline h-6 text-gray-600 hover:text-gray-400"
-                    onClick={() => setIsOpen(false)}
-                  />
+                  <button>
+                    <XIcon
+                      className="inline h-6 text-gray-600 hover:text-gray-400"
+                      onClick={() => setIsOpen(false)}
+                    />
+                  </button>
                 </Dialog.Title>
-                <Dialog.Description className="m-5 p-4 border-[1px] rounded-md shadow-md focus-within:border-indigo-600">
+                {/* <Dialog.Description className="m-5 p-4 border-[1px] rounded-md shadow-md focus-within:border-indigo-600">
                   <input
                     type="text"
                     name="amount"
                     id="amount"
+                    value={search}
+                    onChange={(e) => onSearch(e.target.value)}
                     className="block w-full text-gray-500 outline-0"
                     placeholder="Search name or paste address"
                   />
-                </Dialog.Description>
+                </Dialog.Description> */}
                 <div className="mt-4 overflow-y-auto max-h-96 scrollbar">
-                  {pancakeTokensList.tokens.map((token, index) => (
+                  {pancakeSwapTokensList.tokens.map((token, index) => (
                     <button
                       key={index}
                       className="w-full flex justify-between items-center px-4 py-4 first:pt-2 last:pb-2 hover:bg-gray-100 hover:rounded-md"
