@@ -1,13 +1,13 @@
+import { NavLink } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
+
 import UserCorner from "./UserCorner";
 import ThemeIcon from "./ThemeIcon";
-import { NavLink } from "react-router-dom";
 
 const navigation = [
   { name: "Home", to: "/" },
   { name: "Swap", to: "/swap" },
-  { name: "About", to: "/about" },
 ];
 
 const Navbar = () => {

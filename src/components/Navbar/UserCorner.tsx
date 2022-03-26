@@ -1,8 +1,9 @@
 import { Fragment, useMemo } from "react";
-import { Menu, Transition } from "@headlessui/react";
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
-import { injectedConnector } from "../../utils/web3react";
+import { Menu, Transition } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/outline";
+
+import { injectedConnector } from "../../utils/web3react";
 
 const UserCorner = () => {
   const { active, activate, account, error, deactivate } = useWeb3React();
