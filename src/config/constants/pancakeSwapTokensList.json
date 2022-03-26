@@ -123,7 +123,7 @@
       "logoURI": "https://pancakeswap.finance/images/tokens/0xA7f552078dcC247C2684336020c03648500C6d9F.png"
     },
     {
-      "name": "PancakeSwap Token",
+      "name": "PancakeSwap Token - Testnet",
       "symbol": "CAKE",
       "address": "0xa35062141Fa33BCA92Ce69FeD37D0E8908868AAe",
       "chainId": 97,
@@ -131,7 +131,7 @@
       "logoURI": "https://pancakeswap.finance/images/tokens/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82.png"
     },
     {
-      "name": "BUSD Token",
+      "name": "BUSD Token - Testnet",
       "symbol": "BUSD",
       "address": "0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee",
       "chainId": 97,

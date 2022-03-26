@@ -5,44 +5,51 @@ import {
   QuestionMarkCircleIcon,
   XIcon,
 } from "@heroicons/react/outline";
+
 import pancakeSwapTokensList from "../../config/constants/pancakeSwapTokensList.json";
+
 import Token from "../../typings/Token";
 
 type TokensListModalProps = {
   token: Token;
-  setToken: (token: Token, isTokenA: boolean) => void;
+  handleTokenChange: (token: Token, isTokenA: boolean) => void;
   isTokenA: boolean;
+  balance: string;
 };
 
 const TokensListModal = ({
   token,
-  setToken,
+  handleTokenChange,
   isTokenA,
+  balance,
 }: TokensListModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const selectToken = (token: Token) => {
-    setToken(token, isTokenA);
+    handleTokenChange(token, isTokenA);
     setIsOpen(false);
   };
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setIsOpen(true)}
-        className="flex items-center px-2 py-2 text-sm font-medium text-gray-600 border-[1px] shadow-md rounded-md hover:bg-gray-100 "
-      >
-        {token.logoURI ? (
-          <img className="h-5 w-5 rounded-full" src={token.logoURI} alt="" />
-        ) : (
-          <QuestionMarkCircleIcon className="h-5 inline" />
-        )}
-        <span className="font-bold mx-2">
-          {token.symbol ? token.symbol : "Select token"}
-        </span>
-        <ChevronDownIcon className="h-5 inline" />
-      </button>
+      <div className="flex justify-between items-center">
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className="flex items-center px-2 py-2 text-sm text-gray-600 border-[1px] shadow-md rounded-md hover:bg-gray-100 "
+        >
+          {token.logoURI ? (
+            <img className="h-5 w-5 rounded-full" src={token.logoURI} alt="" />
+          ) : (
+            <QuestionMarkCircleIcon className="h-5 inline" />
+          )}
+          <span className="font-bold mx-2">
+            {token.symbol ? token.symbol : "Select token"}
+          </span>
+          <ChevronDownIcon className="h-5 inline" />
+        </button>
+        <p className="text-gray-600 text-sm font-medium">Balance: {balance}</p>
+      </div>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog

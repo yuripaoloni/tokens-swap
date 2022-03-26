@@ -1,62 +1,78 @@
+import { useState } from "react";
+import { useWeb3React } from "@web3-react/core";
+
 import SwapHeader from "../components/Swap/SwapHeader";
 import TokenInput from "../components/Swap/TokenInput";
-import TokensListModal from "../components/Swap/TokensListModal";
-import { ethers } from "ethers";
-import { useWeb3React } from "@web3-react/core";
-import { contracts } from "../config/contracts";
-import pancakeSwapFactoryV2ABI from "../config/abi/pancakeSwapFactoryV2.json";
-import erc20ABI from "../config/abi/erc20.json";
 
-import { useState } from "react";
+import {
+  getERC20Contract,
+  getPancakeSwapFactoryV2Contract,
+  getPancakeSwapPairContract,
+  getPancakeSwapRouterV2Contract,
+} from "../utils/contractHelpers";
+import {
+  AddressZero,
+  formatBigNumber,
+  getBigNumber,
+} from "../utils/ethersUtils";
+
 import Token from "../typings/Token";
 
 const Swap = () => {
   const [tokenA, setTokenA] = useState<Token>({} as Token);
   const [tokenB, setTokenB] = useState<Token>({} as Token);
 
-  const [inputA, setInputA] = useState<string>("0.0");
-  const [inputB, setInputB] = useState<string>("0.0");
+  const [balanceA, setBalanceA] = useState("0.0");
+  const [balanceB, setBalanceB] = useState("0.0");
+
+  const [inputA, setInputA] = useState("0.0");
+  const [inputB, setInputB] = useState("0.0");
 
   const { library, account } = useWeb3React();
 
-  const testFunction = async () => {
-    const pancakeSwapFactoryV2Contract = new ethers.Contract(
-      contracts.pancakeSwapFactoryV2,
-      pancakeSwapFactoryV2ABI,
-      library
-    );
-
-    const pairsLenght = await pancakeSwapFactoryV2Contract.allPairsLength();
-
-    console.log(pairsLenght);
-
-    const pairs = await pancakeSwapFactoryV2Contract.allPairs(
-      ethers.utils.formatEther(pairsLenght)
-    );
-
-    console.log(pairs);
-  };
-
   const handleTokenChange = async (token: Token, isTokenA: boolean) => {
+    const tokenContract = getERC20Contract(token.address, library);
+    const balance = await tokenContract.balanceOf(account);
+
     if (isTokenA) {
       setTokenA(token);
-
-      const tokenContract = new ethers.Contract(
-        token.address,
-        erc20ABI,
-        library
-      );
-
-      const balance = await tokenContract.balanceOf(account);
-
-      const formattedBalance = ethers.utils.formatUnits(
-        balance,
-        token.decimals
-      );
-
-      setInputA(formattedBalance);
+      setBalanceA(formatBigNumber(balance, token.decimals));
     } else {
       setTokenB(token);
+      setBalanceB(formatBigNumber(balance, token.decimals));
+    }
+  };
+
+  const handleAmountChange = async (input: string, isTokenA: boolean) => {
+    let token = isTokenA ? tokenA : tokenB;
+
+    //TODO handle set input until the value of balance
+    isTokenA ? setInputA(input) : setInputB(input);
+
+    const factoryContract = getPancakeSwapFactoryV2Contract(library);
+
+    const pairAddress = await factoryContract.getPair(
+      tokenA.address,
+      tokenB.address
+    );
+
+    //TODO handle invalid pair
+    if (pairAddress !== AddressZero) {
+      const pairContract = getPancakeSwapPairContract(pairAddress, library);
+
+      const reserves = await pairContract.getReserves();
+
+      const routerContract = getPancakeSwapRouterV2Contract(library);
+
+      const amountOut = await routerContract.getAmountIn(
+        getBigNumber(inputA, token.decimals),
+        isTokenA ? reserves._reserve0 : reserves._reserve1,
+        isTokenA ? reserves._reserve1 : reserves._reserve0
+      );
+
+      isTokenA
+        ? setInputA(formatBigNumber(amountOut, token.decimals))
+        : setInputB(formatBigNumber(amountOut, token.decimals));
     }
   };
 
@@ -73,31 +89,34 @@ const Swap = () => {
               </p>
             </div>
             <div className="p-4">
-              <div className="my-4 mb-12">
-                <TokensListModal
-                  token={tokenA}
-                  setToken={handleTokenChange}
-                  isTokenA
-                />
-                <TokenInput input={inputA} setInput={setInputA} />
-              </div>
-              <div className="my-4 mb-10">
-                <TokensListModal
-                  token={tokenB}
-                  setToken={setTokenB}
-                  isTokenA={false}
-                />
-                <TokenInput input={inputB} setInput={setInputB} />
-              </div>
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  className="place-content-center py-2 px-6 text-sm font-bold text-white bg-indigo-600 rounded-md bg-opacity-85 hover:bg-opacity-70"
-                  onClick={() => testFunction()}
-                >
-                  SWAP
-                </button>
-              </div>
+              <TokenInput
+                balance={balanceA}
+                handleTokenChange={handleTokenChange}
+                input={inputA}
+                isTokenA
+                token={tokenA}
+                handleAmountChange={handleAmountChange}
+              />
+              <TokenInput
+                balance={balanceB}
+                handleTokenChange={handleTokenChange}
+                input={inputB}
+                isTokenA={false}
+                token={tokenB}
+                handleAmountChange={handleAmountChange}
+              />
+            </div>
+            <div className="flex justify-center">
+              <button
+                type="button"
+                className="place-content-center py-2 px-6 text-sm font-bold text-white bg-indigo-600 rounded-md bg-opacity-85 hover:bg-opacity-70 disabled:bg-indigo-400"
+                disabled={inputA === "0.0" || inputB === "0.0"}
+                onClick={() => {}}
+              >
+                {inputA === "0.0" || inputB === "0.0"
+                  ? "Enter an amount"
+                  : "SWAP"}
+              </button>
             </div>
           </div>
         </div>
