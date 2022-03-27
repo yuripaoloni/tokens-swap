@@ -7,7 +7,6 @@ import TokenInput from "../components/Swap/TokenInput";
 import {
   getERC20Contract,
   getPancakeSwapFactoryV2Contract,
-  getPancakeSwapPairContract,
   getPancakeSwapRouterV2Contract,
 } from "../utils/contractHelpers";
 import {
@@ -28,59 +27,106 @@ const Swap = () => {
   const [inputA, setInputA] = useState("0.0");
   const [inputB, setInputB] = useState("0.0");
 
+  const [typingTimeout, setTypingTimeout] =
+    useState<ReturnType<typeof setTimeout>>();
+
+  const [error, setError] = useState(false);
+
   const { library, account } = useWeb3React();
 
-  const handleTokenChange = async (token: Token, isTokenA: boolean) => {
+  const getTokenBalance = async (token: Token): Promise<string> => {
     const tokenContract = getERC20Contract(token.address, library);
     const balance = await tokenContract.balanceOf(account);
+    return formatBigNumber(balance, token.decimals);
+  };
 
-    if (isTokenA) {
-      setTokenA(token);
-      setBalanceA(formatBigNumber(balance, token.decimals));
+  const checkPairAddress = async (
+    addressA: string,
+    addressB: string
+  ): Promise<boolean> => {
+    if (addressA && addressB) {
+      const factoryContract = getPancakeSwapFactoryV2Contract(library);
+
+      const pairAddress = await factoryContract.getPair(addressA, addressB);
+
+      return pairAddress !== AddressZero;
+    }
+
+    return true;
+  };
+
+  const onChangeTokenA = async (token: Token) => {
+    const pairExists = await checkPairAddress(token.address, tokenB.address);
+
+    if (!pairExists) {
+      setError(true);
     } else {
-      setTokenB(token);
-      setBalanceB(formatBigNumber(balance, token.decimals));
+      const balance = await getTokenBalance(token);
+      setTokenA(token);
+      setBalanceA(balance);
+
+      if (tokenB?.address) {
+        updateTokensAmount(inputA, true);
+      }
     }
   };
 
-  const handleAmountChange = async (input: string, isTokenA: boolean) => {
-    let token = isTokenA ? tokenA : tokenB;
+  const onChangeTokenB = async (token: Token) => {
+    const pairExists = await checkPairAddress(tokenA.address, token.address);
 
-    //TODO handle set input until the value of balance
+    if (pairExists) {
+      setError(true);
+    } else {
+      const balance = await getTokenBalance(token);
+      setTokenB(token);
+      setBalanceB(balance);
+
+      if (tokenA?.address) {
+        console.log("in");
+        updateTokensAmount(inputB, false);
+      }
+    }
+  };
+
+  const onChangeInput = async (input: string, isTokenA: boolean) => {
     isTokenA ? setInputA(input) : setInputB(input);
 
-    const factoryContract = getPancakeSwapFactoryV2Contract(library);
+    if (typingTimeout) clearTimeout(typingTimeout);
 
-    const pairAddress = await factoryContract.getPair(
-      tokenA.address,
-      tokenB.address
+    setTypingTimeout(
+      setTimeout(async () => {
+        updateTokensAmount(input, isTokenA);
+      }, 1500)
     );
+  };
 
-    //TODO handle invalid pair
-    if (pairAddress !== AddressZero) {
-      const pairContract = getPancakeSwapPairContract(pairAddress, library);
+  const updateTokensAmount = async (input: string, isTokenA: boolean) => {
+    const routerContract = getPancakeSwapRouterV2Contract(library);
 
-      const reserves = await pairContract.getReserves();
+    let amount = isTokenA
+      ? await routerContract.getAmountsOut(
+          getBigNumber(input, tokenA.decimals),
+          [tokenA.address, tokenB.address]
+        )
+      : await routerContract.getAmountsIn(
+          getBigNumber(input, tokenB.decimals),
+          [tokenA.address, tokenB.address]
+        );
 
-      const routerContract = getPancakeSwapRouterV2Contract(library);
+    isTokenA
+      ? setInputB(formatBigNumber(amount[1], tokenB.decimals))
+      : setInputA(formatBigNumber(amount[0], tokenA.decimals));
+  };
 
-      const amountOut = await routerContract.getAmountIn(
-        getBigNumber(inputA, token.decimals),
-        isTokenA ? reserves._reserve0 : reserves._reserve1,
-        isTokenA ? reserves._reserve1 : reserves._reserve0
-      );
-
-      isTokenA
-        ? setInputA(formatBigNumber(amountOut, token.decimals))
-        : setInputB(formatBigNumber(amountOut, token.decimals));
-    }
+  const swap = () => {
+    //TODO check here for valid balances
   };
 
   return (
     <div>
       <SwapHeader />
       <main>
-        <div className="max-w-md mx-auto pt-10 sm:px-6 lg:px-8">
+        <div className="max-w-md mx-auto sm:px-6 lg:px-8 pt-8 lg:pt-14 2xl:pt-18">
           <div className="shadow-xl rounded-3xl h-[480px] border-2">
             <div className="border-b-[1px] border-gray-200 p-3">
               <p className="text-lg font-bold text-center">Swap</p>
@@ -91,19 +137,19 @@ const Swap = () => {
             <div className="p-4">
               <TokenInput
                 balance={balanceA}
-                handleTokenChange={handleTokenChange}
+                onChangeToken={onChangeTokenA}
                 input={inputA}
                 isTokenA
                 token={tokenA}
-                handleAmountChange={handleAmountChange}
+                onChangeInput={onChangeInput}
               />
               <TokenInput
                 balance={balanceB}
-                handleTokenChange={handleTokenChange}
+                onChangeToken={onChangeTokenB}
                 input={inputB}
                 isTokenA={false}
                 token={tokenB}
-                handleAmountChange={handleAmountChange}
+                onChangeInput={onChangeInput}
               />
             </div>
             <div className="flex justify-center">

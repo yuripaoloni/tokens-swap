@@ -12,21 +12,21 @@ import Token from "../../typings/Token";
 
 type TokensListModalProps = {
   token: Token;
-  handleTokenChange: (token: Token, isTokenA: boolean) => void;
+  onChangeToken: (token: Token) => void;
   isTokenA: boolean;
   balance: string;
 };
 
 const TokensListModal = ({
   token,
-  handleTokenChange,
+  onChangeToken,
   isTokenA,
   balance,
 }: TokensListModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const selectToken = (token: Token) => {
-    handleTokenChange(token, isTokenA);
+    onChangeToken(token);
     setIsOpen(false);
   };
 

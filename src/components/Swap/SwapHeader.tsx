@@ -1,7 +1,7 @@
 const SwapHeader = () => {
   return (
     <header className="bg-white shadow-md">
-      <div className="max-w-full xl:text-center mx-auto py-6 px-4">
+      <div className="max-w-full text-center mx-auto py-6 px-4">
         <h1 className="text-lg tracking-tight font-extrabold text-gray-900 ">
           <span className="block md:inline md:text-left">
             <span className="text-indigo-600">1. </span>

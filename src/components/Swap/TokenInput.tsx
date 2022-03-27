@@ -4,26 +4,26 @@ import Token from "../../typings/Token";
 
 type TokenInputProps = {
   input: string;
-  handleAmountChange: (input: string, isTokenA: boolean) => void;
+  onChangeInput: (input: string, isTokenA: boolean) => void;
   token: Token;
-  handleTokenChange: (token: Token, isTokenA: boolean) => void;
+  onChangeToken: (token: Token) => void;
   balance: string;
   isTokenA: boolean;
 };
 
 const TokenInput = ({
   input,
-  handleAmountChange,
+  onChangeInput,
   token,
-  handleTokenChange,
+  onChangeToken,
   balance,
   isTokenA,
 }: TokenInputProps) => {
   return (
-    <div className="my-4 mb-12">
+    <div className="my-4 mb-10">
       <TokensListModal
         token={token}
-        handleTokenChange={handleTokenChange}
+        onChangeToken={onChangeToken}
         isTokenA={isTokenA}
         balance={balance}
       />
@@ -34,7 +34,8 @@ const TokenInput = ({
           name="amount"
           id="amount"
           value={input}
-          onChange={(e) => handleAmountChange(e.target.value, isTokenA)}
+          onFocus={(e) => e.target.select()}
+          onChange={(e) => onChangeInput(e.target.value, isTokenA)}
           className="block w-full text-right text-gray-500 outline-0"
           placeholder="0.0"
         />
