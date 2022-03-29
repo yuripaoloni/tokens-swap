@@ -6,11 +6,7 @@ type AlertContextValue = {
   showAlert: boolean;
   alertMessage: string;
   alertVariant: Variant;
-  toggleAlert: (
-    showAlert: boolean,
-    alertMessage: string,
-    alertVariant: Variant
-  ) => void;
+  toggleAlert: (alertMessage: string, alertVariant: Variant) => void;
 };
 type AlertProviderProps = { children: React.ReactNode };
 
@@ -21,17 +17,22 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertVariant, setAlertVariant] = useState<Variant>("success");
 
-  const toggleAlert = (
-    showAlert: boolean,
-    alertMessage: string,
-    alertVariant: Variant
-  ) => {
+  const toggleAlert = (alertMessage: string, alertVariant: Variant) => {
     setAlertVariant(alertVariant);
     setAlertMessage(alertMessage);
-    setShowAlert(showAlert);
+    setShowAlert(true);
+
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 5000);
   };
 
-  const value = { showAlert, alertMessage, alertVariant, toggleAlert };
+  const value = {
+    showAlert,
+    alertMessage,
+    alertVariant,
+    toggleAlert,
+  };
 
   return (
     <AlertContext.Provider value={value}>{children}</AlertContext.Provider>
