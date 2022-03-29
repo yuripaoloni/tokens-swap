@@ -9,6 +9,8 @@ import Swap from "./pages/Swap";
 
 import Navbar from "./components/Navbar/Navbar";
 
+import Alert from "./components/Alert";
+
 const App = () => {
   const { activate } = useWeb3React();
 
@@ -18,6 +20,7 @@ const App = () => {
 
   return (
     <div className="min-h-full">
+      <Alert />
       <Navbar />
       <Routes>
         <Route path="/" element={<Landing />} />

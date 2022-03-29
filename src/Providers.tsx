@@ -1,15 +1,18 @@
 import { BrowserRouter } from "react-router-dom";
 import { Web3ReactProvider } from "@web3-react/core";
+
 import { getLibrary } from "./utils/web3react";
 
-type ProvidersProps = {
-  children: React.ReactNode;
-};
+import { AlertProvider } from "./contexts/AlertContext";
+
+type ProvidersProps = { children: React.ReactNode };
 
 const Providers = ({ children }: ProvidersProps) => {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <BrowserRouter>{children}</BrowserRouter>
+      <AlertProvider>
+        <BrowserRouter>{children}</BrowserRouter>
+      </AlertProvider>
     </Web3ReactProvider>
   );
 };
