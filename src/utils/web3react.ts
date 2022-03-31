@@ -5,7 +5,7 @@ const POLLING_INTERVAL = 12000;
 
 //? 56 BSC, 97 BSC Testnet
 export const injectedConnector = new InjectedConnector({
-  supportedChainIds: [4, 56],
+  supportedChainIds: [56],
 });
 
 export const getLibrary = (provider: providers.ExternalProvider) => {

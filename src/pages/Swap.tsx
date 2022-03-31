@@ -17,6 +17,8 @@ import {
 
 import Token from "../typings/Token";
 
+import { useAlert } from "../contexts/AlertContext";
+
 const Swap = () => {
   const [tokenA, setTokenA] = useState<Token>({} as Token);
   const [tokenB, setTokenB] = useState<Token>({} as Token);
@@ -30,107 +32,137 @@ const Swap = () => {
   const [typingTimeout, setTypingTimeout] =
     useState<ReturnType<typeof setTimeout>>();
 
-  const [error, setError] = useState(false);
-
   const { library, account } = useWeb3React();
+  const { toggleAlert } = useAlert();
 
   const getTokenBalance = async (token: Token): Promise<string> => {
-    const tokenContract = getERC20Contract(token.address, library);
-    const balance = await tokenContract.balanceOf(account);
-    return formatBigNumber(balance, token.decimals);
+    try {
+      const tokenContract = getERC20Contract(token.address, library);
+      const balance = await tokenContract.balanceOf(account);
+      return formatBigNumber(balance, token.decimals);
+    } catch (err) {
+      toggleAlert("Invalid input values", "danger");
+      return "0.0";
+    }
   };
 
-  const checkPairAddress = async (
-    addressA: string,
-    addressB: string
-  ): Promise<boolean> => {
+  const checkPairAddress = async (addressA: string, addressB: string) => {
     if (addressA && addressB) {
       const factoryContract = getPancakeSwapFactoryV2Contract(library);
 
       const pairAddress = await factoryContract.getPair(addressA, addressB);
 
-      return pairAddress !== AddressZero;
+      if (pairAddress === AddressZero) throw new Error("Invalid pair");
     }
-
-    return true;
   };
 
   const onChangeTokenA = async (token: Token) => {
-    const pairExists = await checkPairAddress(token.address, tokenB.address);
+    try {
+      await checkPairAddress(token.address, tokenB.address);
 
-    if (!pairExists) {
-      setError(true);
-    } else {
       const balance = await getTokenBalance(token);
       setTokenA(token);
       setBalanceA(balance);
 
-      if (tokenB?.address) {
-        updateTokensAmount(inputA, true);
-      }
+      updateTokensAmount(inputA, token, true);
+    } catch (error) {
+      toggleAlert(
+        `Invalid pair ${token.symbol}-${tokenB.symbol} - select different tokens`,
+        "danger"
+      );
     }
   };
 
   const onChangeTokenB = async (token: Token) => {
-    const pairExists = await checkPairAddress(tokenA.address, token.address);
+    try {
+      await checkPairAddress(tokenA.address, token.address);
 
-    if (pairExists) {
-      setError(true);
-    } else {
       const balance = await getTokenBalance(token);
       setTokenB(token);
       setBalanceB(balance);
 
-      if (tokenA?.address) {
-        console.log("in");
-        updateTokensAmount(inputB, false);
-      }
+      updateTokensAmount(inputB, token, false);
+    } catch (error) {
+      toggleAlert(
+        `Invalid pair ${tokenA.symbol}-${token.symbol} - select different tokens`,
+        "danger"
+      );
     }
   };
 
-  const onChangeInput = async (input: string, isTokenA: boolean) => {
-    isTokenA ? setInputA(input) : setInputB(input);
+  const onChangeInput = (input: string, isTokenA: boolean) => {
+    if (input.match(/^[0-9]*[.,]?[0-9]*$/)) {
+      isTokenA ? setInputA(input) : setInputB(input);
 
-    if (typingTimeout) clearTimeout(typingTimeout);
+      if (typingTimeout) clearTimeout(typingTimeout);
 
-    setTypingTimeout(
-      setTimeout(async () => {
-        updateTokensAmount(input, isTokenA);
-      }, 1500)
-    );
+      setTypingTimeout(
+        setTimeout(async () => {
+          await updateTokensAmount(input, isTokenA ? tokenA : tokenB, isTokenA);
+        }, 1500)
+      );
+    }
   };
 
-  const updateTokensAmount = async (input: string, isTokenA: boolean) => {
-    const routerContract = getPancakeSwapRouterV2Contract(library);
+  const updateTokensAmount = async (
+    input: string,
+    token: Token,
+    isTokenA: boolean
+  ) => {
+    try {
+      if (tokenA?.address && tokenB?.address && input !== "0.0") {
+        const routerContract = getPancakeSwapRouterV2Contract(library);
 
-    let amount = isTokenA
-      ? await routerContract.getAmountsOut(
-          getBigNumber(input, tokenA.decimals),
-          [tokenA.address, tokenB.address]
-        )
-      : await routerContract.getAmountsIn(
-          getBigNumber(input, tokenB.decimals),
-          [tokenA.address, tokenB.address]
-        );
+        let amount = isTokenA
+          ? await routerContract.getAmountsOut(
+              getBigNumber(input, token.decimals),
+              [token.address, tokenB.address]
+            )
+          : await routerContract.getAmountsIn(
+              getBigNumber(input, token.decimals),
+              [token.address, tokenB.address]
+            );
 
-    isTokenA
-      ? setInputB(formatBigNumber(amount[1], tokenB.decimals))
-      : setInputA(formatBigNumber(amount[0], tokenA.decimals));
+        isTokenA
+          ? setInputB(formatBigNumber(amount[1], tokenB.decimals))
+          : setInputA(formatBigNumber(amount[0], tokenA.decimals));
+      }
+    } catch (error) {
+      toggleAlert("Invalid input values", "danger");
+    }
   };
 
-  const swap = () => {
-    //TODO check here for valid balances
+  const swap = async () => {
+    try {
+      const routerContract = getPancakeSwapRouterV2Contract(library);
+
+      const routerSigner = routerContract.connect(library.getSigner());
+
+      await routerSigner.swapExactTokensForTokens(
+        getBigNumber(inputA, tokenA.decimals),
+        getBigNumber(inputA, tokenA.decimals),
+        [tokenA.address, tokenB.address],
+        account,
+        1648564231
+      );
+
+      //TODO listener for event with routerContract.on("xxx")
+    } catch (error: any) {
+      toggleAlert(error.data.message, "danger");
+    }
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-white dark:bg-slate-750">
       <SwapHeader />
       <main>
         <div className="max-w-md mx-auto sm:px-6 lg:px-8 pt-8 lg:pt-14 2xl:pt-18">
-          <div className="shadow-xl rounded-3xl h-[480px] border-2">
-            <div className="border-b-[1px] border-gray-200 p-3">
-              <p className="text-lg font-bold text-center">Swap</p>
-              <p className="text-gray-500 text-center text-sm">
+          <div className="shadow-xl rounded-3xl h-[480px] border-t-[1px] border-gray-100 dark:border-slate-800 dark:bg-slate-800">
+            <div className="border-b-[1px] border-gray-200 dark:border-gray-900 shadow-md p-3">
+              <p className="text-lg font-bold text-center dark:text-gray-200">
+                Swap
+              </p>
+              <p className="text-gray-500 dark:text-gray-300 text-center text-sm">
                 Swap instantly any BEP-20 token
               </p>
             </div>
@@ -155,9 +187,9 @@ const Swap = () => {
             <div className="flex justify-center">
               <button
                 type="button"
-                className="place-content-center py-2 px-6 text-sm font-bold text-white bg-indigo-600 rounded-md bg-opacity-85 hover:bg-opacity-70 disabled:bg-indigo-400"
+                className="place-content-center py-2 px-6 text-sm font-bold text-white bg-indigo-600 rounded-md bg-opacity-85 hover:bg-opacity-90 disabled:bg-indigo-400"
                 disabled={inputA === "0.0" || inputB === "0.0"}
-                onClick={() => {}}
+                onClick={() => swap()}
               >
                 {inputA === "0.0" || inputB === "0.0"
                   ? "Enter an amount"
