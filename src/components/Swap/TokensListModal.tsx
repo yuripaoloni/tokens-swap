@@ -36,7 +36,7 @@ const TokensListModal = ({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="flex items-center px-2 py-2 text-sm text-gray-600 border-[1px] shadow-md rounded-md hover:bg-gray-100 "
+          className="flex items-center px-2 py-2 text-sm text-gray-600 dark:text-gray-300 shadow-md rounded-md hover:bg-gray-100 dark:hover:bg-slate-700"
         >
           {token.logoURI ? (
             <img className="h-5 w-5 rounded-full" src={token.logoURI} alt="" />
@@ -48,7 +48,9 @@ const TokensListModal = ({
           </span>
           <ChevronDownIcon className="h-5 inline" />
         </button>
-        <p className="text-gray-600 text-sm font-medium">Balance: {balance}</p>
+        <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">
+          Balance: {balance}
+        </p>
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -86,10 +88,10 @@ const TokensListModal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-md overflow-auto text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <div className="inline-block w-full max-w-md overflow-auto text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-xl rounded-2xl">
                 <Dialog.Title
                   as="h3"
-                  className="flex justify-between text-xl font-bold text-gray-900 py-4 px-4 border-b-[1px]"
+                  className="flex justify-between text-xl font-bold text-gray-900 dark:text-gray-300 py-4 px-4 border-b-[1px] dark:border-slate-750 shadow-md"
                 >
                   Select a Token
                   <button>
@@ -99,22 +101,11 @@ const TokensListModal = ({
                     />
                   </button>
                 </Dialog.Title>
-                {/* <Dialog.Description className="m-5 p-4 border-[1px] rounded-md shadow-md focus-within:border-indigo-600">
-                  <input
-                    type="text"
-                    name="amount"
-                    id="amount"
-                    value={search}
-                    onChange={(e) => onSearch(e.target.value)}
-                    className="block w-full text-gray-500 outline-0"
-                    placeholder="Search name or paste address"
-                  />
-                </Dialog.Description> */}
                 <div className="mt-4 overflow-y-auto max-h-96 scrollbar">
                   {pancakeSwapTokensList.tokens.map((token, index) => (
                     <button
                       key={index}
-                      className="w-full flex justify-between items-center px-4 py-4 first:pt-2 last:pb-2 hover:bg-gray-100 hover:rounded-md"
+                      className="w-full flex justify-between items-center px-4 py-4 first:pt-2 last:pb-2 hover:bg-gray-100 dark:hover:bg-slate-700 hover:rounded-md"
                       onClick={() => selectToken(token)}
                     >
                       <div className="flex items-center">
@@ -123,14 +114,14 @@ const TokensListModal = ({
                           src={token.logoURI}
                           alt=""
                         />
-                        <div className="ml-3 text-gray-600 font-semibold text-left">
+                        <div className="ml-3 text-gray-600 dark:text-gray-300 font-semibold text-left">
                           {token.symbol}
                           <p className="text-left text-gray-400 text-sm">
                             {token.name}
                           </p>
                         </div>
                       </div>
-                      <p>0</p>
+                      <p className="dark:text-gray-300">0</p>
                     </button>
                   ))}
                 </div>

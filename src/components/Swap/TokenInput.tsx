@@ -27,16 +27,19 @@ const TokenInput = ({
         isTokenA={isTokenA}
         balance={balance}
       />
-      <div className="p-4 mt-4 border-[1px] rounded-md shadow-md">
+      <div className="p-4 mt-4 rounded-md shadow-md">
         <input
           type="text"
+          minLength={1}
+          maxLength={7}
           inputMode="decimal"
           name="amount"
           id="amount"
           value={input}
           onFocus={(e) => e.target.select()}
           onChange={(e) => onChangeInput(e.target.value, isTokenA)}
-          className="block w-full text-right text-gray-500 outline-0"
+          className="block w-full text-right outline-0 text-gray-500 dark:text-gray-200 bg-inherit"
+          disabled={token?.address ? false : true}
           placeholder="0.0"
         />
       </div>

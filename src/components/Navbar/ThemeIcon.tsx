@@ -20,9 +20,9 @@ const ThemeIcon = () => {
   return (
     <button
       type="button"
-      className="bg-gray-800 p-1 pr-2 rounded-full text-gray-400 hover:text-white "
+      className="text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-900 dark:hover:text-white p-2 rounded-full"
+      onClick={() => handleThemeChange()}
     >
-      <span className="sr-only">View notifications</span>
       <Transition
         as={Fragment}
         show={theme === "dark"}
@@ -30,24 +30,16 @@ const ThemeIcon = () => {
         enterFrom="opacity-0 rotate-[-120deg] scale-50"
         enterTo="opacity-100 rotate-0 scale-100"
       >
-        <SunIcon
-          className="h-6 w-6"
-          aria-hidden="true"
-          onClick={() => handleThemeChange()}
-        />
+        <SunIcon className="h-6 w-6" aria-hidden="true" />
       </Transition>
       <Transition
         as={Fragment}
-        show={theme === "light"}
+        show={theme !== "dark"}
         enter="transform transition duration-[500ms]"
         enterFrom="opacity-0 rotate-[-120deg] scale-50"
         enterTo="opacity-100 rotate-0 scale-100"
       >
-        <MoonIcon
-          className="h-6 w-6"
-          aria-hidden="true"
-          onClick={() => handleThemeChange()}
-        />
+        <MoonIcon className="h-6 w-6" aria-hidden="true" />
       </Transition>
     </button>
   );

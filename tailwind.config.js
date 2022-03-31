@@ -8,6 +8,11 @@ module.exports = {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
+      colors: {
+        slate: {
+          750: "#1e293f",
+        },
+      },
     },
   },
   plugins: [],

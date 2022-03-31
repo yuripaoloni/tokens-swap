@@ -16,15 +16,17 @@ const UserCorner = () => {
     [deactivate]
   );
 
+  // text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-900 dark:hover:text-white p-2 rounded-full
+
   return (
     <Menu as="div" className="ml-3 relative">
       <div className="min-w-[127px] flex justify-center">
         {active ? (
-          <Menu.Button className="group bg-gray-800 p-2 flex text-sm rounded-full">
-            <p className="text-gray-300 text-base my-auto pr-2 group-hover:text-white">
+          <Menu.Button className="group p-2 flex text-sm rounded-full hover:bg-gray-200 dark:hover:bg-gray-900">
+            <p className="text-gray-800 dark:text-gray-300 text-base my-auto pr-2 dark:group-hover:text-white">
               0x...{account?.slice(account.length - 4)}
             </p>
-            <UserCircleIcon className="h-8 w-8 text-gray-300 group-hover:text-white" />
+            <UserCircleIcon className="h-8 w-8 text-gray-800 dark:text-gray-300 dark:group-hover:text-white" />
           </Menu.Button>
         ) : (
           <button

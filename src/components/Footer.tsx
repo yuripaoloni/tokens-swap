@@ -1,12 +1,9 @@
 const Footer = () => {
   return (
-    <footer
-      className="text-center text-white"
-      style={{ backgroundColor: "#f1f1f1" }}
-    >
+    <footer className="text-center text-white bg-gray-100 dark:bg-inherit">
       <div className="container pt-9">
         <div className="flex justify-center mb-9">
-          <a href="#!" className="mr-9 text-gray-800">
+          <a href="#!" className="mr-9 text-gray-800 dark:text-gray-300">
             <svg
               aria-hidden="true"
               focusable="false"
@@ -23,7 +20,7 @@ const Footer = () => {
               ></path>
             </svg>
           </a>
-          <a href="#!" className="mr-9 text-gray-800">
+          <a href="#!" className="mr-9 text-gray-800 dark:text-gray-300">
             <svg
               aria-hidden="true"
               focusable="false"
@@ -40,7 +37,7 @@ const Footer = () => {
               ></path>
             </svg>
           </a>
-          <a href="#!" className="mr-9 text-gray-800">
+          <a href="#!" className="mr-9 text-gray-800 dark:text-gray-300">
             <svg
               aria-hidden="true"
               focusable="false"
@@ -57,7 +54,7 @@ const Footer = () => {
               ></path>
             </svg>
           </a>
-          <a href="#!" className="mr-9 text-gray-800">
+          <a href="#!" className="mr-9 text-gray-800 dark:text-gray-300">
             <svg
               aria-hidden="true"
               focusable="false"
@@ -74,7 +71,7 @@ const Footer = () => {
               ></path>
             </svg>
           </a>
-          <a href="#!" className="mr-9 text-gray-800">
+          <a href="#!" className="mr-9 text-gray-800 dark:text-gray-300">
             <svg
               aria-hidden="true"
               focusable="false"
@@ -91,7 +88,7 @@ const Footer = () => {
               ></path>
             </svg>
           </a>
-          <a href="#!" className="text-gray-800">
+          <a href="#!" className="text-gray-800 dark:text-gray-300">
             <svg
               aria-hidden="true"
               focusable="false"
@@ -112,11 +109,14 @@ const Footer = () => {
       </div>
 
       <div
-        className="text-center text-gray-700 p-4"
+        className="text-center p-4 text-gray-700 dark:text-gray-400"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
       >
         © 2022 Copyright:{" "}
-        <a className="text-gray-800" href="https://github.com/yuripaoloni">
+        <a
+          className="text-gray-800 dark:text-gray-400"
+          href="https://github.com/yuripaoloni"
+        >
           Yuri Paoloni
         </a>
       </div>

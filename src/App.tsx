@@ -16,10 +16,13 @@ const App = () => {
 
   useEffect(() => {
     activate(injectedConnector);
+
+    localStorage.getItem("theme") === "dark" &&
+      document.documentElement.classList.add("dark");
   }, [activate]);
 
   return (
-    <div className="min-h-full">
+    <div className="min-h-full dark:bg-slate-750">
       <Alert />
       <Navbar />
       <Routes>
