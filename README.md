@@ -1,5 +1,12 @@
 # Tokens-swap
 
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/50517749/161719487-77242b13-b545-4a37-9488-95096a30d31e.png" data-canonical-src="https://user-images.githubusercontent.com/50517749/161719487-77242b13-b545-4a37-9488-95096a30d31e.png" width="500" />
+  <img src="https://user-images.githubusercontent.com/50517749/161719567-3d28a4d1-c659-4058-8c8e-d9e08da448b1.png" data-canonical-src="https://user-images.githubusercontent.com/50517749/161719567-3d28a4d1-c659-4058-8c8e-d9e08da448b1.png" width="500" />
+</div>
+
+---
+
 Tokens-swap is React web application which allows the swap of [BEP-20](https://github.com/bnb-chain/BEPs/blob/master/BEP20.md) tokens. It was built using [ethers.js](https://docs.ethers.io/v5/getting-started/) and [web3-react](https://github.com/NoahZinsmeister/web3-react) for the blockchain connection, and [TailwindCSS](https://tailwindcss.com/) for the styling.
 
 The swap functionality has been implemented using a set of [PancakeSwap](https://pancakeswap.finance/)'s contracts:
