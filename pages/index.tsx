@@ -1,10 +1,25 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import Link from "next/link";
+
+import { useWeb3React } from "@web3-react/core";
+
+import { injectedConnector } from "../utils/web3react";
 
 import Footer from "../components/Footer";
+import { NextPage } from "next";
 
-const Landing = () => {
+const Landing: NextPage = () => {
+  const { activate } = useWeb3React();
+
+  useEffect(() => {
+    activate(injectedConnector);
+
+    localStorage.getItem("theme") === "dark" &&
+      document.documentElement.classList.add("dark");
+  }, [activate]);
+
   return (
-    <div className="dark:bg-slate-800  ">
+    <div className="dark:bg-slate-800">
       <div className="max-w-7xl mx-auto h-screen">
         <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
           <div className="sm:text-center lg:text-left">
@@ -21,26 +36,19 @@ const Landing = () => {
             </p>
             <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
               <div className="rounded-md drop-shadow-md">
-                <Link
-                  to="swap"
-                  className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-                >
-                  Swap
-                </Link>
+                <p className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
+                  <Link href="swap">Swap</Link>
+                </p>
               </div>
               <div className="mt-3 sm:mt-0 sm:ml-3 drop-shadow-md">
-                <Link
-                  to="#"
-                  className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-200 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
-                >
-                  Read documentation
-                </Link>
+                <p className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-200 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10">
+                  <Link href="#">Read documentation</Link>
+                </p>
               </div>
             </div>
           </div>
         </main>
       </div>
-      <Footer />
     </div>
   );
 };

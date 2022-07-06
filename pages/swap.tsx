@@ -18,8 +18,9 @@ import {
 import Token from "../typings/Token";
 
 import { useAlert } from "../contexts/AlertContext";
+import { NextPage } from "next";
 
-const Swap = () => {
+const Swap: NextPage = () => {
   const [tokenA, setTokenA] = useState<Token>({} as Token);
   const [tokenB, setTokenB] = useState<Token>({} as Token);
 

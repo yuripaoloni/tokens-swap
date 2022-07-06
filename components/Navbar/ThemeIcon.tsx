@@ -1,9 +1,15 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { SunIcon, MoonIcon } from "@heroicons/react/outline";
 import { Transition } from "@headlessui/react";
 
 const ThemeIcon = () => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme"));
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    setTheme(
+      localStorage.getItem("theme") ? localStorage.getItem("theme")! : "light"
+    );
+  }, []);
 
   const handleThemeChange = () => {
     if (localStorage.getItem("theme") === "dark") {

@@ -1,4 +1,6 @@
-import { NavLink } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/Image";
+import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 
@@ -11,6 +13,8 @@ const navigation = [
 ];
 
 const Navbar = () => {
+  const router = useRouter();
+
   return (
     <Disclosure as="nav" className="bg-white-100 dark:bg-gray-800 shadow-md">
       {({ open }) => (
@@ -30,28 +34,29 @@ const Navbar = () => {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <img
-                    className="hidden lg:block h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                  <Image
+                    className="hidden lg:block"
                     alt="workflow"
+                    height={40}
+                    width={40}
+                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                    layout="intrinsic"
                   />
                 </div>
                 <div className="hidden sm:block sm:ml-6 ">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <NavLink
-                        key={item.name}
-                        to={item.to}
-                        className={({ isActive }) =>
-                          `${
-                            isActive
+                      <Link href={item.to} key={item.name} role="button">
+                        <p
+                          className={`${
+                            router.pathname == item.to
                               ? "bg-gray-300 dark:bg-gray-900 dark:text-white"
                               : "text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-900  dark:hover:text-white"
-                          } px-3 py-2 rounded-md text-sm font-medium`
-                        }
-                      >
-                        {item.name}
-                      </NavLink>
+                          } px-3 py-2 rounded-md text-sm font-medium`}
+                        >
+                          {item.name}
+                        </p>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -66,20 +71,19 @@ const Navbar = () => {
           <Disclosure.Panel className="sm:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navigation.map((item) => (
-                <Disclosure.Button key={item.name} className="block ">
-                  <NavLink
-                    to={item.to}
-                    className={({ isActive }) =>
-                      `${
-                        isActive
+                <Link key={item.name} href={item.to} role="button">
+                  <Disclosure.Button className="block">
+                    <p
+                      className={`${
+                        router.pathname == item.to
                           ? "bg-gray-300 dark:bg-gray-900 dark:text-white"
                           : "text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-900  dark:hover:text-white"
-                      } block px-3 py-2 rounded-md text-base font-medium `
-                    }
-                  >
-                    {item.name}
-                  </NavLink>
-                </Disclosure.Button>
+                      } block px-3 py-2 rounded-md text-base font-medium `}
+                    >
+                      {item.name}
+                    </p>
+                  </Disclosure.Button>
+                </Link>
               ))}
             </div>
           </Disclosure.Panel>

@@ -10,6 +10,8 @@ import pancakeSwapTokensList from "../../config/constants/pancakeSwapTokensList.
 
 import Token from "../../typings/Token";
 
+import Image from "next/image";
+
 type TokensListModalProps = {
   token: Token;
   onChangeToken: (token: Token) => void;
@@ -39,7 +41,14 @@ const TokensListModal = ({
           className="flex items-center px-2 py-2 text-sm text-gray-600 dark:text-gray-300 shadow-md rounded-md hover:bg-gray-100 dark:hover:bg-slate-700"
         >
           {token.logoURI ? (
-            <img className="h-5 w-5 rounded-full" src={token.logoURI} alt="" />
+            <Image
+              className="h-5 w-5 rounded-full"
+              src={token.logoURI}
+              alt=""
+              height={20}
+              width={20}
+              layout="fixed"
+            />
           ) : (
             <QuestionMarkCircleIcon className="h-5 inline" />
           )}
@@ -65,9 +74,9 @@ const TokensListModal = ({
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
-              leave="ease-in duration-300"
+              leave="ease-in duration-200"
               leaveFrom="opacity-100"
-              leaveTo="opacity-0"
+              leaveTo="opacity-0 scale-100"
             >
               <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
             </Transition.Child>
@@ -109,10 +118,13 @@ const TokensListModal = ({
                       onClick={() => selectToken(token)}
                     >
                       <div className="flex items-center">
-                        <img
-                          className="h-7 w-7 rounded-full"
+                        <Image
+                          className="rounded-full"
                           src={token.logoURI}
                           alt=""
+                          height={25}
+                          width={25}
+                          layout="fixed"
                         />
                         <div className="ml-3 text-gray-600 dark:text-gray-300 font-semibold text-left">
                           {token.symbol}
